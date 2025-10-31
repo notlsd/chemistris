@@ -8,10 +8,10 @@
 - [x] Define the minimum viable feature set for the first Godot 4 build and flag non-critical features for later sprints.
 
 ## Phase 1 – Godot Project Scaffolding
-- [ ] Create a Godot 4 project (`godot4/chemistris`) with standard folders (`scenes`, `scripts`, `assets`, `data`, `ui`, `addons`).
-- [ ] Configure project settings (display size, input map, default environment) to match GameMaker reactor bounds and aspect ratio.
-- [ ] Establish version-control ignores for Godot-generated files and artifact directories.
-- [ ] Add tooling: install Godot asset-import settings, eslint-equivalent (`gdlint` or editor config), and format/lint hooks mirroring Code Complete 2 style guidance.
+- [x] Create a Godot 4 project in the repository root with standard folders (`scenes`, `scripts`, `assets`, `data`, `ui`, `addons`).
+- [x] Configure project settings (display size, input map, default environment) to match GameMaker reactor bounds and aspect ratio.
+- [x] Establish version-control ignores for Godot-generated files and artifact directories.
+- [x] Add tooling: install Godot asset-import settings, eslint-equivalent (`gdlint` or editor config), and format/lint hooks mirroring Code Complete 2 style guidance.
 
 ## Phase 2 – Asset & Data Migration
 - [ ] Export sprites, fonts, and audio from GameMaker; convert to Godot-friendly formats (PNG sequences, OGG) while preserving naming conventions.

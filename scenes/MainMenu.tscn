@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://main_menu_placeholder"]
+
+[node name="MainMenu" type="Control"]
+
+[node name="PlaceholderLabel" type="Label" parent="."]
+anchors_preset = 15
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+text = "MainMenu.tscn placeholder.\nReplace during Phase 3."
+horizontal_alignment = 1
+vertical_alignment = 1

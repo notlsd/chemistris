@@ -9,3 +9,9 @@
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Godot project build artifacts
+.godot/
+*.import
+export_presets.cfg
+.mono/
