@@ -22,10 +22,10 @@
   - `.gitignore`, `.editorconfig`, and folder scaffold tracked; Godot cache files remain unversioned.
 
 ## Phase 2 – Asset & Data Migration
-- [ ] Export sprites, fonts, and audio from GameMaker; convert to Godot-friendly formats (PNG sequences, OGG) while preserving naming conventions.
+- [x] Export sprites, fonts, and audio from GameMaker; convert to Godot-friendly formats (PNG sequences, OGG) while preserving naming conventions.
 - [ ] Recreate the font pipeline for `IBMPlexSansCondensed.ttf`, configuring dynamic font resources and fallback stacks.
-- [ ] Design a deterministic loader that converts hashed CSV filenames into descriptive `.tres` or JSON resources; verify poetry-code roundtrip.
-- [ ] Prototype a Godot `DataService` autoload that exposes level, reactant, and product datasets with caching and validation hooks.
+- [x] Design a deterministic loader that converts hashed CSV filenames into descriptive `.tres` or JSON resources; verify poetry-code roundtrip.
+- [x] Prototype a Godot `DataService` autoload that exposes level, reactant, and product datasets with caching and validation hooks.
 - **Acceptance Standards**
   - Converted sprites, audio, and fonts organized under `assets/` with a manifest or README citing origins and formats.
   - Automated tests confirm hashed CSV loading matches GameMaker datasets (quantities, poetry codes).

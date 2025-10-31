@@ -1,0 +1,14 @@
+{
+  "level": {
+    "filename": "level.csv",
+    "hash_source": "LEVEL beebc167bca74e318f87492c6d029cfb.csv"
+  },
+  "reactant": {
+    "filename": "reactant.csv",
+    "hash_source": "REACTANT d77c9dfee50f4fb89f1ecb2d53423b94.csv"
+  },
+  "product": {
+    "filename": "product.csv",
+    "hash_source": "PRODUCT 4c15d94714214794b76bfc3393c7451d.csv"
+  }
+}

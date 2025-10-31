@@ -1,0 +1,23 @@
+L0_LEVEL,L1_CODE,L2_COUNT,L3_CHAP,L4_ORDER,L5_BAN,L6_ON
++ H2O,飞流直下三千尺,24 H2O,H,0,,Yes
+- H2O,疑是银河上九天,24 H2,H,1,,Yes
+H2O2,茫茫只见双氧水,12 O2,H,3,,No
+CO + CO2,暗堆冰炭在深衷&洪炉炽炭燎一毛,2CO+CO2+2CO+CO2+2CO+CO2+2CO+CO2,C,0,,Yes
+CO - CO2,暗堆冰炭在深衷&洪炉炽炭燎一毛,12 CO2,C,0,CO,Yes
+NaCO3 / NaHCO3,碳酸钠碳酸氢钠,12 NaHCO3,C,1,,Yes
+NaClO / NaHCO3,次氯酸盐碳酸氢,NaHCO3+HClO+NaHCO3+HClO+NaHCO3+HClO+NaHCO3+HClO+NaHCO3+HClO+NaHCO3+HClO,Cl,1,,Yes
+CaO,浅雪初成玉石灰,6 CaCO3,Ca,1,,No
++ Cl2,森寒绿气透青霞,12 Cl2,Cl,0,,Yes
++ NaClO2,亚氯酸钠二一二,2 NaClO2,Na,0,,Yes
++ NaClO,次氯酸钠四三二,2 NaClO,Na,0,,Yes
++ NaCl,氯化钠是六五二,2 NaCl,Na,0,,No
+NaClO + NaClO2,次氯酸钠四三二&亚氯酸钠二一二,2 NaClO2 + 2 NaClO,Na,1,,Yes
+Cl2 + NaOH,一氯两碱次氯盐,NaCl + H2O + NaCl + H2O + NaCl + H2O + NaCl + H2O + NaCl + H2O + NaCl + H2O,Na,1,,Yes
+O2 / O3,氧气放电是臭氧,24 O3,O,0,,Yes
+O3 / O2,臭氧光照是氧气,24 O2,O,0,,Yes
+- SiO2,叶剪玻璃芯糁碳,Si+CO+Si+CO+Si+CO+Si+CO+Si+CO+Si+CO,O,1,,Yes
++ CO,暗堆冰炭在深衷,12 CO,O,1,,Yes
++ Fe2O3,三氧化二铁生锈,12 Fe2O3,O,1,,Yes
++ Fe3O4,铁与高温水蒸汽,12 H2,Fe,0,,Yes
+Fe3O4 - Fe2O3,三氧化二铁生锈&四氧化三铁点燃,1 Fe3O4,Fe,0,Fe2O3,Yes
+NaHCO3,小苏打生小气泡,NaCl+H2O+CO2+NaCl+H2O+CO2+NaCl+H2O+CO2+NaCl+H2O+CO2,Na,1,,No

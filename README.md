@@ -2,7 +2,7 @@
 
 ## Project Layout
 - `scenes/` – Godot `.tscn` scene roots (`MainMenu`, `Level`, `Molecule`).
-- `scripts/` – GDScript logic; mirror GameMaker libraries (`ReactionController.gd`, `DataService.gd`).
+- `scripts/` – GDScript logic; mirror GameMaker libraries (`ReactionController.gd`, `ChemistrisDataService.gd`).
 - `assets/` – Art, audio, and font resources staged for import (`data/` for CSV mirrors).
 - `ui/` – Control scenes and reusable HUD components.
 - `data/` – Runtime JSON/CSV copies generated from the original hash-named files.
@@ -16,4 +16,8 @@
 
 ## Next Steps
 - Flesh out base scenes under `scenes/` and bind inputs declared in `project.godot`.
-- Implement `DataService.gd` first to translate hashed CSV filenames into descriptive resources; tests will target this module.
+- Continue fleshing out gameplay scenes now that `DataService` exposes CSV data structures.
+
+## Data Service
+- Autoload `DataService` (script class `ChemistrisDataService`) loads `data/catalog.json` and provides `get_reactant_map()`, `get_product_map()`, and `get_level_rows()`.
+- Headless verification: `godot --headless --script res://scripts/tests/run_data_tests.gd`.
