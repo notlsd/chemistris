@@ -1,0 +1,1 @@
+Draw_multiple_equation(EQUATION_DISPLAY_INI_PX_X, EQUATION_DISPLAY_INI_PX_Y, global.lvArrayEquaPoem)

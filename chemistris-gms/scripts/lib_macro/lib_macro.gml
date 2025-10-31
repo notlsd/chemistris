@@ -1,0 +1,108 @@
+/// LIB_MACRO INCLUDES ALL MACRO DEFINITION ///
+//-----------------------------------------///
+#macro PRODUCT_DISPLAY_TIME 180
+
+#macro PT_ELEMENT_LENGTH 80
+
+// Reactor Boundary
+#macro REACTOR_UP 0
+#macro REACTOR_DOWN 1080
+#macro REACTOR_LEFT 600
+#macro REACTOR_RIGHT 1320
+
+// Cell Parameters
+#macro N_DISPLAYED_HOR_CELLS 10
+#macro N_HIDDEN_VER_CELLS 5
+#macro N_DISPLAYED_VER_CELLS 15
+
+#macro CELL_SIDE_PX 72
+#macro BOND_SIDE_PX 12
+#macro CELL_SIDE_PX_TIMES_BOND (CELL_SIDE_PX/BOND_SIDE_PX)
+
+#macro TILESET_COLUMN 10
+
+
+
+
+#macro BOND_VERTICAL   0
+#macro BOND_HORIZONTAL 1
+
+#macro ROW_TABLE_HEADER 0
+#macro ROW_TABLE_1ST_CONTENT 1
+
+// Reaction Table
+#macro RT_CODE     0
+#macro RT_MOLECULE 1
+#macro RT_QUANTITY 2
+
+// Level Table
+#macro L0_LEVEL	0
+#macro L1_CODE  1
+#macro L2_COUNT 2
+#macro L3_CHAP  3
+#macro L4_ORDER 4
+#macro L5_BAN   5
+#macro L6_ON    6
+
+
+
+// Molecular Parameters
+#macro INITIAL_FALLING_SPEED 1
+#macro SUPER_SPEED 200
+
+// Testing Molecular Colors
+#macro TRANSPARENT 0
+#macro BLACK 1
+#macro BLUE 2
+#macro GREEN 3
+#macro WHITE 4
+#macro ORANGE 5
+#macro PINK 6
+#macro RED 7
+#macro YELLOW 8
+
+#region ABANDONED
+
+//Parameter of sprite_collision_mask()
+#macro BBOXMODE_AUTOMATIC 0
+#macro BBOXMODE_FULL_IMAGE 1
+#macro BBOXMODE_USER_DEFINED 2
+#macro MASK_KIND_PRECISE 0
+#macro MASK_KIND_RECTANGULAR 1
+#macro MASK_KIND_DISK 2
+#macro MASK_KIND_DIAMOND 3
+
+#endregion
+
+#macro COUNT_DISPLAY_INI_GRID_X   0
+#macro COUNT_DISPLAY_INI_GRID_Y   0
+#macro COUNT_DISPLAY_MAX_IN_LINE  12
+#macro COUNT_DISPLAY_LENGTH       24
+
+#macro EQUATION_DISPLAY_INI_PX_X  1350
+#macro EQUATION_DISPLAY_INI_PX_Y   300
+#macro EQUATION_DISPLAY_L_OR_M_FONT_N 10
+#macro EQUATION_DISPLAY_M_OR_S_FONT_N 17
+
+#macro OFFSET_OF_FONT_L_IN_EQUATION_DISPLAY_INI_PX_X  0
+#macro OFFSET_DISPLAY_EQUATION_CONDITION_PX_Y  10
+#macro OFFSET_CHAPTER_CAPITAL 60
+
+#macro MENU_BOX_OF_ELEMENT_CHAPTER_LEFT  1600
+#macro MENU_BOX_OF_ELEMENT_CHAPTER_RIGHT 1850
+#macro MENU_BOX_OF_ELEMENT_CHAPTER_UP      10
+#macro MENU_BOX_OF_ELEMENT_CHAPTER_DOWN   600
+#macro MENU_BOX_OF_ELEMENT_CHAPTER_WIDTH    3
+#macro MENU_BOX_OF_ELEMENT_CHAPTER_MARGINS 10
+#macro CHAPTER_MARGINS 50
+
+#macro BANNED_DISPLAY_GRID_X   1
+#macro BANNED_DISPLAY_GRID_Y   1
+
+enum levelStatus
+{
+    LOCKED,
+    UNLOCKED,
+    PASSED
+} 
+
