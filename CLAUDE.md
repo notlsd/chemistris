@@ -163,6 +163,29 @@ Follow GameMaker Language conventions:
 
 Before committing, run GameMaker's "Code Cleanup" utility to normalize formatting.
 
+## Git Commit Guidelines
+
+**Always add detailed commit messages:**
+- Use conventional commit format: `type: subject` (e.g., `feat:`, `fix:`, `docs:`, `refactor:`)
+- Write clear, descriptive commit bodies explaining the "why" behind changes
+- Include context about what changed and why it matters
+- Reference related issues or design decisions when applicable
+- Add co-authorship attribution when using AI assistance
+
+Example:
+```
+feat: Add new oxygen reaction chain
+
+Implement O2 → O3 reaction triggered by electricity condition.
+Updates REACTANT and PRODUCT CSV files with new poetry code.
+
+Fixes chemistry balance issue in Chapter 3.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
 ## Testing
 
 No automated test framework exists. Testing approach:
