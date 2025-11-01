@@ -40,16 +40,16 @@ func get_product_map() -> Dictionary:
 		_product_cache = _build_equation_molecule_map("product")
 	return _product_cache
 
-func get_level_rows() -> Array:
+func get_level_rows() -> Array[Dictionary]:
 	if _level_rows_cache.is_empty():
-		var dataset: Dictionary = _load_dataset("level")
+		var dataset := _load_dataset("level")
 		var header: Array = dataset.get("header", [])
 		var rows: Array = dataset.get("rows", [])
-		for row in rows:
-			var row_array: Array = row
+		for row_value in rows:
+			var row: Array = row_value
 			var entry: Dictionary = {}
 			for i in range(header.size()):
-				entry[header[i]] = row_array[i]
+				entry[header[i]] = row[i]
 			_level_rows_cache.append(entry)
 	return _level_rows_cache
 
@@ -57,21 +57,21 @@ func get_equation_codes() -> Array:
 	return get_reactant_map().keys()
 
 func validate_stoichiometry() -> bool:
-	var react_map: Dictionary = get_reactant_map()
-	var product_map: Dictionary = get_product_map()
+	var react_map := get_reactant_map()
+	var product_map := get_product_map()
 	for code in react_map.keys():
 		if not product_map.has(code):
 			push_error("DataService: equation %s missing from product map" % code)
 			return false
-		var left: Dictionary = _collapse_to_atoms(react_map[code])
-		var right: Dictionary = _collapse_to_atoms(product_map[code])
+		var left := _collapse_to_atoms(react_map[code])
+		var right := _collapse_to_atoms(product_map[code])
 		if left != right:
 			push_error("DataService: stoichiometry mismatch for %s -> %s vs %s" % [code, left, right])
 			return false
 	return true
 
 func _build_equation_molecule_map(catalog_key: String) -> Dictionary:
-	var dataset: Dictionary = _load_dataset(catalog_key)
+	var dataset := _load_dataset(catalog_key)
 	var header: Array = dataset.get("header", [])
 	var rows: Array = dataset.get("rows", [])
 	if header.is_empty():
@@ -80,11 +80,11 @@ func _build_equation_molecule_map(catalog_key: String) -> Dictionary:
 	var idx_mole := header.find("RT_MOLECULE")
 	var idx_qty := header.find("RT_QUANTITY")
 	var map: Dictionary = {}
-	for row in rows:
-		var row_array: Array = row
-		var code: String = row_array[idx_code]
-		var molecule: String = row_array[idx_mole]
-		var qty_text: String = row_array[idx_qty]
+	for row_value in rows:
+		var row: Array = row_value
+		var code: String = row[idx_code]
+		var molecule: String = row[idx_mole]
+		var qty_text: String = row[idx_qty]
 		var qty: int = 1 if qty_text.is_empty() else int(qty_text)
 		if not map.has(code):
 			map[code] = {}
@@ -114,18 +114,18 @@ func _parse_csv(path: String) -> Dictionary:
 	var lines := text.strip_edges().split("\n", false)
 	if lines.is_empty():
 		return {}
-	var header: Array = _split_csv_line(lines[0])
+	var header := _split_csv_line(lines[0])
 	var rows: Array = []
 	for i in range(1, lines.size()):
-		if lines[i].strip_edges() == "":
+		var line_text := lines[i].strip_edges()
+		if line_text == "":
 			continue
-		rows.append(_split_csv_line(lines[i]))
+		rows.append(_split_csv_line(line_text))
 	return {"header": header, "rows": rows}
 
 func _split_csv_line(line: String) -> Array:
-	# Simple CSV splitter: commas are safe because source data avoids quoting.
 	var parts: Array = []
-	var current: String = ""
+	var current := ""
 	for char in line:
 		if char == ',':
 			parts.append(current)
@@ -140,7 +140,6 @@ func _collapse_to_atoms(molecule_map: Dictionary) -> Dictionary:
 	for molecule in molecule_map.keys():
 		if molecule.is_empty():
 			continue
-		# Skip reaction conditions (stored as special Unicode symbols)
 		var code_point: int = molecule.unicode_at(0)
 		if not _is_chemical_symbol_start(code_point):
 			continue
@@ -153,22 +152,22 @@ func _collapse_to_atoms(molecule_map: Dictionary) -> Dictionary:
 
 func _parse_molecule(formula: String) -> Dictionary:
 	var atoms: Dictionary = {}
-	var i: int = 0
+	var i := 0
 	while i < formula.length():
-		var ch: String = formula[i]
+		var ch := formula[i]
 		if not _is_uppercase_letter(ch):
 			i += 1
 			continue
 		var symbol := ch
 		i += 1
 		if i < formula.length():
-			var next_ch: String = formula[i]
+			var next_ch := formula[i]
 			if _is_lowercase_letter(next_ch):
 				symbol += next_ch
 				i += 1
 		var digits := ""
 		while i < formula.length():
-			var digit_ch: String = formula[i]
+			var digit_ch := formula[i]
 			if not _is_digit(digit_ch):
 				break
 			digits += digit_ch
@@ -178,7 +177,7 @@ func _parse_molecule(formula: String) -> Dictionary:
 	return atoms
 
 func _is_chemical_symbol_start(code_point: int) -> bool:
-	return (code_point >= 0x41 and code_point <= 0x5A)
+	return code_point >= 0x41 and code_point <= 0x5A
 
 func _is_uppercase_letter(ch: String) -> bool:
 	return ch.length() == 1 and ch >= "A" and ch <= "Z"
