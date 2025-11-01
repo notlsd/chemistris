@@ -126,12 +126,12 @@ func _parse_csv(path: String) -> Dictionary:
 func _split_csv_line(line: String) -> Array:
 	var parts: Array = []
 	var current := ""
-	for char in line:
-		if char == ',':
+	for ch in line:
+		if ch == ',':
 			parts.append(current)
 			current = ""
 		else:
-			current += char
+			current += ch
 	parts.append(current)
 	return parts
 
@@ -140,7 +140,8 @@ func _collapse_to_atoms(molecule_map: Dictionary) -> Dictionary:
 	for molecule in molecule_map.keys():
 		if molecule.is_empty():
 			continue
-		var code_point: int = molecule.unicode_at(0)
+		var molecule_str: String = str(molecule)
+		var code_point: int = molecule_str.unicode_at(0)
 		if not _is_chemical_symbol_start(code_point):
 			continue
 		var per_molecule: Dictionary = _parse_molecule(molecule)
