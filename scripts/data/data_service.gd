@@ -9,6 +9,7 @@ var _dataset_cache: Dictionary = {}
 var _reactant_cache: Dictionary = {}
 var _product_cache: Dictionary = {}
 var _level_rows_cache: Array[Dictionary] = []
+var _equation_atom_cache: Dictionary = {}
 
 func _ready() -> void:
 	# Autoload hook: preload catalog so the first gameplay scene can query data immediately.
@@ -39,6 +40,19 @@ func get_product_map() -> Dictionary:
 	if _product_cache.is_empty():
 		_product_cache = _build_equation_molecule_map("product")
 	return _product_cache
+
+func get_reactant_array(code: String, include_conditions := false) -> Array[String]:
+	return _expand_molecule_array(get_reactant_map(), code, include_conditions)
+
+func get_product_array(code: String) -> Array[String]:
+	return _expand_molecule_array(get_product_map(), code, true)
+
+func get_equation_atom_map() -> Dictionary:
+	if _equation_atom_cache.is_empty():
+		var react_map := get_reactant_map()
+		for code in react_map.keys():
+			_equation_atom_cache[code] = _collapse_to_atoms(react_map[code])
+	return _equation_atom_cache
 
 func get_level_rows() -> Array[Dictionary]:
 	if _level_rows_cache.is_empty():
@@ -141,10 +155,10 @@ func _collapse_to_atoms(molecule_map: Dictionary) -> Dictionary:
 		if molecule.is_empty():
 			continue
 		var molecule_str: String = str(molecule)
-		var code_point: int = molecule_str.unicode_at(0)
-		if not _is_chemical_symbol_start(code_point):
+		if is_condition_symbol(molecule_str):
 			continue
-		var per_molecule: Dictionary = _parse_molecule(molecule)
+		var code_point: int = molecule_str.unicode_at(0)
+		var per_molecule: Dictionary = _parse_molecule(molecule_str)
 		var count: int = int(molecule_map[molecule])
 		for atom in per_molecule.keys():
 			var contribution: int = int(per_molecule[atom]) * count
@@ -179,6 +193,26 @@ func _parse_molecule(formula: String) -> Dictionary:
 
 func _is_chemical_symbol_start(code_point: int) -> bool:
 	return code_point >= 0x41 and code_point <= 0x5A
+
+func is_condition_symbol(symbol: String) -> bool:
+	if symbol.length() == 0:
+		return false
+	return symbol in ["₳", "₼", "¤", "₪", "¥", "₩", "@"]
+
+func _expand_molecule_array(map: Dictionary, code: String, include_conditions: bool) -> Array[String]:
+	if not map.has(code):
+		return []
+	var array: Array[String] = []
+	var molecule_map: Dictionary = map[code]
+	for molecule_key in molecule_map.keys():
+		var molecule_name: String = str(molecule_key)
+		if not include_conditions and is_condition_symbol(molecule_name):
+			continue
+		var qty: int = int(molecule_map[molecule_key])
+		for _i in qty:
+			array.append(molecule_name)
+	array.sort()
+	return array
 
 func _is_uppercase_letter(ch: String) -> bool:
 	return ch.length() == 1 and ch >= "A" and ch <= "Z"

@@ -350,6 +350,7 @@ Project uses semantic versioning (format: `v[MAJOR].[MINOR].[PATCH]`):
 - **v0.3.0**: Documentation & planning release (migration roadmap)
 - **v0.3.1**: Scene & node architecture (Phase 3 complete)
 - **v0.4.0**: Godot 4 project scaffolding (Phase 1 complete)
+- **v0.4.1**: Reaction algorithm implementation (Phase 4 partial - 2/5 tasks)
 - **v0.5.0**: Asset & data migration (Phase 2 complete) - *pending*
 
 **Version Guidelines:**
