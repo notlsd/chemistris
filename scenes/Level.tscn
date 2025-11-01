@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/scene/level.gd" id="1"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1")
+
+[node name="GridRoot" type="Node2D" parent="."]
+
+[node name="BoardTileMap" type="TileMap" parent="GridRoot"]
+tile_set = null
+cell_quadrant_size = 1
+cell_size = Vector2i(72, 72)
+
+[node name="MoleculeLayer" type="Node2D" parent="GridRoot"]
+
+[node name="ConditionLayer" type="Node2D" parent="GridRoot"]
+
+[node name="ReactionLayer" type="Node2D" parent="."]
+
+[node name="HudCanvas" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="HudCanvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CounterPanel" type="Label" parent="HudCanvas/HUD"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+text = "Counters appear here"
+
+[node name="EquationPanel" type="Label" parent="HudCanvas/HUD"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 48.0
+text = "Equation panel placeholder"

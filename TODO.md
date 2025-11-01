@@ -32,10 +32,10 @@
   - Godot importer previews key assets without warnings; font resources render poetry text correctly.
 
 ## Phase 3 – Scene & Node Architecture
-- [ ] Sketch target scene tree architecture mapping GameMaker objects (`obj_level`, `obj_mole`, `obj_cond`, `obj_disp`) to Godot scenes and nodes.
-- [ ] Implement base scenes: `MainMenu.tscn`, `Level.tscn`, `Molecule.tscn`, `Condition.tscn`, `ReactionDisplay.tscn`, including signals and exported properties.
-- [ ] Set up an `Autoload` singleton for global state (level progress, reaction maps) and port relevant macros as constants.
-- [ ] Build a tilemap/grid system mirroring GameMaker cell sizes (72px) using Godot `TileMap` or `GridContainer`, including coordinate conversion helpers.
+- [x] Sketch target scene tree architecture mapping GameMaker objects (`obj_level`, `obj_mole`, `obj_cond`, `obj_disp`) to Godot scenes and nodes.
+- [x] Implement base scenes: `MainMenu.tscn`, `Level.tscn`, `Molecule.tscn`, `Condition.tscn`, `ReactionDisplay.tscn`, including signals and exported properties.
+- [x] Set up an `Autoload` singleton for global state (level progress, reaction maps) and port relevant macros as constants.
+- [x] Build a tilemap/grid system mirroring GameMaker cell sizes (72px) using Godot `TileMap` or `GridContainer`, including coordinate conversion helpers.
 - **Acceptance Standards**
   - Architecture diagram and notes checked into `docs/scene_architecture.md` (or equivalent) describing node hierarchies.
   - Placeholder scenes load in the editor with exported properties and signal hooks; autoload registered in `project.godot`.

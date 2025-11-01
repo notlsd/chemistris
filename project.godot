@@ -18,6 +18,8 @@ config/features=PackedStringArray("4.5")
 [autoload]
 
 DataService="*res://scripts/data/data_service.gd"
+GameState="*res://scripts/autoload/game_state.gd"
+GridHelper="*res://scripts/util/grid_helper.gd"
 
 [display]
 

@@ -1,8 +1,8 @@
 # Chemistris (Godot 4) Scaffold
 
 ## Project Layout
-- `scenes/` – Godot `.tscn` scene roots (`MainMenu`, `Level`, `Molecule`).
-- `scripts/` – GDScript logic; mirror GameMaker libraries (`ReactionController.gd`, `ChemistrisDataService.gd`).
+- `scenes/` – Godot `.tscn` scene roots (`MainMenu`, `Level`, `Molecule`, `Condition`, `ReactionDisplay`).
+- `scripts/` – GDScript logic; mirror GameMaker libraries and scenes (`ChemistrisDataService.gd`, `GameState.gd`, `scene/*.gd`).
 - `assets/` – Art, audio, and font resources staged for import (`data/` for CSV mirrors).
 - `ui/` – Control scenes and reusable HUD components.
 - `data/` – Runtime JSON/CSV copies generated from the original hash-named files.
@@ -20,4 +20,6 @@
 
 ## Data Service
 - Autoload `DataService` (script class `ChemistrisDataService`) loads `data/catalog.json` and provides `get_reactant_map()`, `get_product_map()`, and `get_level_rows()`.
+- Autoload `GameState` tracks current level selection/progress; `GridHelper` exposes grid coordinate helpers (72px cells, hidden rows).
+- Base scenes are placeholders wired to the new architecture; hook them up to gameplay logic in Phase 4.
 - Headless verification: `godot --headless --script res://scripts/tests/run_data_tests.gd`.
