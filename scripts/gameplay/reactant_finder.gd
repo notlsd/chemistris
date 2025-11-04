@@ -15,7 +15,7 @@ func find_reactant_combinations(trigger_id: int, requirements: Models.ReactionRe
 		return []
 	var results: Array = []
 	var selected_ids: Array[int] = [trigger_id]
-	var counts := {start_molecule.molecule_code: 1}
+	var counts: Dictionary = {start_molecule.molecule_code: 1}
 	var visited_sets := {}
 	_backtrack(selected_ids, counts, requirements, grid_state, results, visited_sets)
 	return results
@@ -28,8 +28,8 @@ func _backtrack(selected_ids: Array[int], counts: Dictionary, requirements: Mode
 		if not visited_sets.has(key):
 			visited_sets[key] = true
 			results.append(selected_ids.duplicate())
-		return
 
+		return
 	var frontier := _collect_neighbor_candidates(selected_ids, grid_state)
 	for candidate_id in frontier:
 		if candidate_id in selected_ids:
@@ -52,7 +52,7 @@ func _backtrack(selected_ids: Array[int], counts: Dictionary, requirements: Mode
 
 func _collect_neighbor_candidates(selected_ids: Array[int], grid_state: Models.ReactionGridState) -> Array[int]:
 	var candidates: Array[int] = []
-	var seen := {}
+	var seen: Dictionary = {}
 	for id in selected_ids:
 		for neighbor_id in grid_state.neighbors_of(id):
 			if seen.has(neighbor_id):
