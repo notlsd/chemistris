@@ -16,7 +16,7 @@ func find_reactant_combinations(trigger_id: int, requirements: Models.ReactionRe
 	var results: Array = []
 	var selected_ids: Array[int] = [trigger_id]
 	var counts: Dictionary = {start_molecule.molecule_code: 1}
-	var visited_sets := {}
+	var visited_sets: Dictionary = {}
 	_backtrack(selected_ids, counts, requirements, grid_state, results, visited_sets)
 	return results
 
@@ -24,10 +24,10 @@ func _backtrack(selected_ids: Array[int], counts: Dictionary, requirements: Mode
 	if requirements.satisfied_by(counts):
 		var sorted := selected_ids.duplicate()
 		sorted.sort()
-		var key := PackedInt32Array(sorted).hash()
+		var key: String = str(sorted)
 		if not visited_sets.has(key):
 			visited_sets[key] = true
-			results.append(selected_ids.duplicate())
+			results.append(sorted)
 
 		return
 	var frontier := _collect_neighbor_candidates(selected_ids, grid_state)
@@ -37,8 +37,8 @@ func _backtrack(selected_ids: Array[int], counts: Dictionary, requirements: Mode
 		var candidate := grid_state.get_molecule(candidate_id)
 		if candidate == null:
 			continue
-		var current_count := counts.get(candidate.molecule_code, 0)
-		var target_count := requirements.molecule_counts.get(candidate.molecule_code, 0)
+		var current_count: int = int(counts.get(candidate.molecule_code, 0))
+		var target_count: int = int(requirements.molecule_counts.get(candidate.molecule_code, 0))
 		if current_count >= target_count:
 			continue
 		selected_ids.append(candidate_id)
