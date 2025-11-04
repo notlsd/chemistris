@@ -15,8 +15,7 @@ func _format_text(equation_code: String, product_counts: Dictionary) -> String:
 	var lines: Array[String] = [equation_code]
 	for product in product_counts.keys():
 		lines.append("%s × %d" % [product, int(product_counts[product])])
-	return "
-".join(lines)
+	return "\n".join(lines)
 
 func _on_timer_timeout() -> void:
 	display_finished.emit()

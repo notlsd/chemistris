@@ -76,3 +76,9 @@ For tests, states will be created manually. In gameplay, `LevelController` conve
 3. Extend `Level` script to construct `ReactionGridState` from scene nodes and call `ReactionController`.
 4. Update `ReactionDisplay` to consume new `ReactionResult`.
 5. Document usage and update `TODO` Phase 4 checklist.
+
+
+## Implementation Notes
+- `Level.tscn` now spawns reactant/condition placeholders per equation and feeds reactions via `ReactionController`.
+- Manual trigger: focus the level scene and press `confirm` to attempt the first equation.
+- Tests cover success, missing adjacency failure, and condition-triggered reactions (see `run_reaction_tests.gd`).

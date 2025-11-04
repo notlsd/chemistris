@@ -44,9 +44,9 @@
 ## Phase 4 – Core Gameplay Systems
 - [x] Port `LIB_ALGO_MAIN` flow into a Godot service (`ReactionController.gd`) with well-commented, unit-testable methods for validation and execution.
 - [x] Translate `LIB_ALGO_REACTANT` and `LIB_ALGO_PRODUCT` logic into data-driven processing modules; ensure stoichiometry is preserved.
-- [ ] Recreate molecule falling physics using Godot’s `_physics_process`, respecting `INITIAL_FALLING_SPEED` and collision layers.
-- [ ] Implement condition triggers (heat, light, electricity) with node groups/signals replacing GameMaker event wiring.
-- [ ] Port `LIB_ALGO_DISPLAY` visual updates into animation players and tween sequences, matching timing constants like `PRODUCT_DISPLAY_TIME`.
+- [x] Recreate molecule falling physics using Godot’s `_physics_process`, respecting `INITIAL_FALLING_SPEED` and collision layers.
+- [x] Implement condition triggers (heat, light, electricity) with node groups/signals replacing GameMaker event wiring.
+- [x] Port `LIB_ALGO_DISPLAY` visual updates into animation players and tween sequences, matching timing constants like `PRODUCT_DISPLAY_TIME`.
 - **Acceptance Standards**
   - Automated tests cover reactant discovery, product assembly, and error cases against sample CSV data.
   - Playable demo scene runs at least one full reaction loop end-to-end using Godot systems.

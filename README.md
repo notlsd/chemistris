@@ -17,9 +17,10 @@
 ## Next Steps
 - Flesh out base scenes under `scenes/` and bind inputs declared in `project.godot`.
 - Continue fleshing out gameplay scenes now that `DataService` exposes CSV data structures.
+- In `Level.tscn`, press `confirm` to run the staged reaction prototype fed by `ReactionController`.
 
 ## Data Service
 - Autoload `DataService` (script class `ChemistrisDataService`) loads `data/catalog.json` and provides `get_reactant_map()`, `get_product_map()`, and `get_level_rows()`.
 - Autoload `GameState` tracks current level selection/progress; `GridHelper` exposes grid coordinate helpers (72px cells, hidden rows).
 - Base scenes are placeholders wired to the new architecture; hook them up to gameplay logic in Phase 4.
-- Headless verification: `godot --headless --script res://scripts/tests/run_data_tests.gd`.
+- Headless verification: `godot --headless --script res://scripts/tests/run_data_tests.gd` or `godot --headless --script res://scripts/tests/run_reaction_tests.gd`.
