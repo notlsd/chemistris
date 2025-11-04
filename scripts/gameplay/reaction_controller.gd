@@ -4,13 +4,28 @@ class_name ReactionController
 const Models := preload("res://scripts/gameplay/reaction_models.gd")
 const ReactantFinder := preload("res://scripts/gameplay/reactant_finder.gd")
 const ProductAssembler := preload("res://scripts/gameplay/product_assembler.gd")
+const DataServiceScript := preload("res://scripts/data/data_service.gd")
 
 var _finder: ReactantFinder
 var _assembler: ProductAssembler
+var _data_service: ChemistrisDataService
 
 func _init() -> void:
 	_finder = ReactantFinder.new()
 	_assembler = ProductAssembler.new()
+	_data_service = _resolve_data_service()
+
+func _resolve_data_service() -> ChemistrisDataService:
+	var tree := Engine.get_main_loop()
+	if tree is SceneTree:
+		var root: Node = tree.get_root()
+		if root != null:
+			var autoload: Node = root.get_node_or_null("DataService")
+			if autoload is ChemistrisDataService:
+				return autoload
+	var service: ChemistrisDataService = DataServiceScript.new()
+	service.load_catalog()
+	return service
 
 func attempt_reaction(trigger: Models.ReactionTrigger) -> Models.ReactionResult:
 	var requirements := _build_requirements(trigger.equation_code)
@@ -24,7 +39,7 @@ func attempt_reaction(trigger: Models.ReactionTrigger) -> Models.ReactionResult:
 		for id in combo:
 			var state := trigger.grid_state.get_molecule(id)
 			if state == null:
-				molecules = []
+				molecules.clear()
 				break
 			molecules.append(state)
 		if molecules.is_empty():
@@ -36,21 +51,19 @@ func attempt_reaction(trigger: Models.ReactionTrigger) -> Models.ReactionResult:
 	return null
 
 func _build_requirements(equation_code: String) -> Models.ReactionRequirements:
-	var reactants_with_conditions := DataService.get_reactant_array(equation_code, true)
-	var reactants_without_conditions := DataService.get_reactant_array(equation_code, false)
+	var reactants_with_conditions: Array[String] = _data_service.get_reactant_array(equation_code, true)
+	var reactants_without_conditions: Array[String] = _data_service.get_reactant_array(equation_code, false)
 	if reactants_without_conditions.is_empty():
 		return null
 	var requirements := Models.ReactionRequirements.new()
 	for molecule in reactants_without_conditions:
 		requirements.increment(molecule)
 	for symbol in reactants_with_conditions:
-		if symbol not in reactants_without_conditions and DataService.is_condition_symbol(symbol):
+		if symbol not in reactants_without_conditions and _data_service.is_condition_symbol(symbol):
 			requirements.condition_symbols.append(symbol)
 	return requirements
 
 func _conditions_satisfied(trigger: Models.ReactionTrigger, requirements: Models.ReactionRequirements) -> bool:
 	if requirements.condition_symbols.is_empty():
 		return true
-	if trigger.trigger_condition in requirements.condition_symbols:
-		return true
-	return false
+	return trigger.trigger_condition in requirements.condition_symbols

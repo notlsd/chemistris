@@ -1,11 +1,9 @@
-
 extends SceneTree
 
 const Models := preload("res://scripts/gameplay/reaction_models.gd")
 const ReactionController := preload("res://scripts/gameplay/reaction_controller.gd")
 
 func _init() -> void:
-	DataService.load_catalog()
 	_test_basic_reaction()
 	_test_failure_when_neighbors_missing()
 	_test_condition_requirement()
