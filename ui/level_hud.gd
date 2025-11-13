@@ -39,8 +39,9 @@ func set_condition_symbols(symbols: Array[String], condition_data: Dictionary) -
 		if badge == null:
 			continue
 		var descriptor: Dictionary = condition_data.get(symbol, {})
-		var display_name := descriptor.get("name", "Unknown")
-		var icon := descriptor.get("icon", null)
+		var display_name: String = str(descriptor.get("name", "Unknown"))
+		var icon_value: Variant = descriptor.get("icon", null)
+		var icon: Texture2D = icon_value as Texture2D
 		badge.set_condition(symbol, display_name, icon)
 		condition_container.add_child(badge)
 

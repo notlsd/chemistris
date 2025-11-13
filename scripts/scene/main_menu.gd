@@ -38,18 +38,18 @@ func _ready() -> void:
 func _cache_level_rows() -> void:
 	_level_rows = DataService.get_level_rows()
 	_level_lookup.clear()
-	for row in _level_rows:
-		var level_name := str(row.get("L0_LEVEL", ""))
-		_level_lookup[level_name] = row
+	for level_row: Dictionary in _level_rows:
+		var level_name := str(level_row.get("L0_LEVEL", ""))
+		_level_lookup[level_name] = level_row
 
 func _populate_level_list() -> void:
 	for child in level_list.get_children():
 		child.queue_free()
 	_level_buttons.clear()
-	for row in _level_rows:
+	for level_row: Dictionary in _level_rows:
 		var button := Button.new()
-		var level_name := str(row.get("L0_LEVEL", ""))
-		var chapter := str(row.get("L3_CHAP", ""))
+		var level_name := str(level_row.get("L0_LEVEL", ""))
+		var chapter := str(level_row.get("L3_CHAP", ""))
 		button.text = "%s  •  Chapter %s" % [level_name, chapter if chapter != "" else "—"]
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
