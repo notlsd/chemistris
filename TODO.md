@@ -53,8 +53,8 @@
   - Physics tuning documented; measured fall speed within ±5% of GameMaker reference and conditioners respond correctly.
 
 ## Phase 5 – UI & UX Parity
-- [ ] Rebuild menu flows (`rom_menu`) with Godot `Control` nodes, ensuring navigation, chapter selection, and localization readiness.
-- [ ] Implement in-level HUD (score, equations, condition indicators) using `Control` scenes anchored to Godot’s UI system.
+- [x] Rebuild menu flows (`rom_menu`) with Godot `Control` nodes, ensuring navigation, chapter selection, and localization readiness.
+- [x] Implement in-level HUD (score, equations, condition indicators) using `Control` scenes anchored to Godot’s UI system.
 - [ ] Add pause, fail (`obj_page_fail`), and success (`obj_page_success`) overlays with reusable transitions.
 - [ ] Integrate keyboard/gamepad input mappings and accessibility options (text scaling, color-blind modes if feasible).
 - **Acceptance Standards**
