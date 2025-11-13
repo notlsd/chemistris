@@ -3,15 +3,15 @@ class_name ChemistrisLevelHud
 
 const ConditionBadgeScene := preload("res://ui/condition_badge.tscn")
 
-@onready var level_title: Label = %LevelTitle
-@onready var chapter_label: Label = %ChapterLabel
-@onready var objective_label: Label = %ObjectiveLabel
-@onready var banned_label: Label = %BannedLabel
-@onready var equation_label: RichTextLabel = %EquationLabel
-@onready var reaction_label: Label = %ReactionStatus
-@onready var hint_label: Label = %HintLabel
-@onready var condition_container: HBoxContainer = %ConditionContainer
-@onready var condition_placeholder: Label = %ConditionPlaceholder
+@onready var level_title: Label = $Margin/VBox/Header/LevelTitle
+@onready var chapter_label: Label = $Margin/VBox/Header/ChapterLabel
+@onready var objective_label: Label = $Margin/VBox/ObjectiveLabel
+@onready var banned_label: Label = $Margin/VBox/BannedLabel
+@onready var equation_label: RichTextLabel = $Margin/VBox/EquationPanel/EquationLabel
+@onready var reaction_label: Label = $Margin/VBox/StatusPanel/StatusVBox/ReactionStatus
+@onready var hint_label: Label = $Margin/VBox/StatusPanel/StatusVBox/HintLabel
+@onready var condition_container: HBoxContainer = $Margin/VBox/ConditionPanel/ConditionVBox/ConditionContainer
+@onready var condition_placeholder: Label = $Margin/VBox/ConditionPanel/ConditionVBox/ConditionPlaceholder
 
 var _reaction_attempts := 0
 

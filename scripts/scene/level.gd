@@ -69,6 +69,8 @@ func _ensure_hud() -> void:
 		push_error("Level: unable to instantiate LevelHud scene.")
 		return
 	hud_canvas.add_child(_hud)
+	# Wait for HUD's _ready() to complete before accessing its @onready nodes
+	await _hud.ready
 
 func _setup_grid() -> void:
 	var tile_set: TileSet = board_tile_map.tile_set
@@ -164,13 +166,18 @@ func _spawn_molecule(molecule_code: String, cell: Vector2i) -> void:
 	molecule_layer.add_child(instance)
 
 func _spawn_condition(condition_symbol: String, cell: Vector2i) -> void:
-	var instance: ChemistrisCondition = ConditionScene.instantiate() as ChemistrisCondition
+	var instance := ConditionScene.instantiate()
 	if instance == null:
 		push_error("Level: Condition scene is missing ChemistrisCondition script.")
 		return
-	instance.condition_type = condition_symbol
-	instance.position = GridHelper.cell_to_world(cell, true)
-	condition_layer.add_child(instance)
+	var condition := instance as ChemistrisCondition
+	if condition == null:
+		push_error("Level: Condition scene script mismatch; expected ChemistrisCondition.")
+		instance.queue_free()
+		return
+	condition.condition_type = condition_symbol
+	condition.position = GridHelper.cell_to_world(cell, true)
+	condition_layer.add_child(condition)
 
 
 func _find_condition_symbol(equation_code: String) -> String:
