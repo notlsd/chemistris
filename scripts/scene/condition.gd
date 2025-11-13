@@ -1,4 +1,5 @@
 extends Node2D
+class_name ChemistrisCondition
 
 @export var condition_type := ""
 @export var grid_position := Vector2i.ZERO

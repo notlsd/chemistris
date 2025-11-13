@@ -209,7 +209,7 @@ func _expand_molecule_array(map: Dictionary, code: String, include_conditions: b
 		if not include_conditions and is_condition_symbol(molecule_name):
 			continue
 		var qty: int = int(molecule_map[molecule_key])
-		for _i in qty:
+		for _i in range(qty):
 			array.append(molecule_name)
 	array.sort()
 	return array

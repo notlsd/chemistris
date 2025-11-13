@@ -20,47 +20,61 @@ var _controller := ReactionController.new()
 var _equation_codes: Array[String] = []
 
 func _ready() -> void:
+	if level_id.is_empty() and GameState.current_level_id != "":
+		level_id = GameState.current_level_id
 	if level_id.is_empty():
+		push_warning("Level: level_id not provided; aborting load.")
 		return
 	_load_level(level_id)
 
 func _load_level(id: String) -> void:
-	var level_rows := DataService.get_level_rows()
-	var record := level_rows.filter(func(row): return row.get("L0_LEVEL", "") == id)
-	if record.is_empty():
+	var level_rows: Array[Dictionary] = DataService.get_level_rows()
+	var found_row: Dictionary = {}
+	for row in level_rows:
+		if row.get("L0_LEVEL", "") == id:
+			found_row = row
+			break
+	if found_row.is_empty():
 		push_warning("Level: level id %s not found in data set" % id)
 		return
-	var row: Dictionary = record[0]
 	_setup_grid()
-	_equation_codes = _parse_equation_codes(row)
-	_spawn_initial_entities(row)
+	_equation_codes = _parse_equation_codes(found_row)
+	_spawn_initial_entities()
 
 func _setup_grid() -> void:
-	board_tile_map.cell_size = Vector2i(GridHelper.CELL_SIZE)
+	var tile_set: TileSet = board_tile_map.tile_set
+	if tile_set == null:
+		return
+	var cell_size := Vector2i(int(GridHelper.CELL_SIZE.x), int(GridHelper.CELL_SIZE.y))
+	tile_set.tile_size = cell_size
 
 func _parse_equation_codes(row: Dictionary) -> Array[String]:
 	var code_string: String = row.get("L1_CODE", "")
 	if code_string == "":
 		return []
-	return code_string.split("&", false)
+	var parts := code_string.split("&", false)
+	var codes: Array[String] = []
+	for part in parts:
+		codes.append(String(part))
+	return codes
 
-func _spawn_initial_entities(row: Dictionary) -> void:
-    if _equation_codes.is_empty():
-        return
-    var column_offset: int = 0
-    for eq_index in range(_equation_codes.size()):
-        var equation_code := _equation_codes[eq_index]
-        var molecules := DataService.get_reactant_array(equation_code, false)
-        var reactants_with_conditions := DataService.get_reactant_array(equation_code, true)
-        var row_cell: int = eq_index
-        for i in range(molecules.size()):
-            var cell := Vector2i(column_offset + i, row_cell)
-            _spawn_molecule(molecules[i], cell)
-        for symbol in reactants_with_conditions:
-            if DataService.is_condition_symbol(symbol):
-                var condition_cell := Vector2i(column_offset + molecules.size(), row_cell)
-                _spawn_condition(symbol, condition_cell)
-        column_offset += molecules.size() + 2
+func _spawn_initial_entities() -> void:
+	if _equation_codes.is_empty():
+		return
+	var column_offset: int = 0
+	for eq_index in range(_equation_codes.size()):
+		var equation_code := _equation_codes[eq_index]
+		var molecules := DataService.get_reactant_array(equation_code, false)
+		var reactants_with_conditions := DataService.get_reactant_array(equation_code, true)
+		var row_cell: int = eq_index
+		for i in range(molecules.size()):
+			var cell := Vector2i(column_offset + i, row_cell)
+			_spawn_molecule(molecules[i], cell)
+		for symbol in reactants_with_conditions:
+			if DataService.is_condition_symbol(symbol):
+				var condition_cell := Vector2i(column_offset + molecules.size(), row_cell)
+				_spawn_condition(symbol, condition_cell)
+		column_offset += molecules.size() + 2
 
 func build_grid_state() -> Models.ReactionGridState:
 	var state := Models.ReactionGridState.new()
@@ -76,8 +90,8 @@ func build_grid_state() -> Models.ReactionGridState:
 		var cell_pos := molecule_state.atoms[0].cell.position
 		var neighbors: Array[int] = []
 		for dir in directions:
-			var neighbor_id := cell_to_id.get(cell_pos + dir, null)
-			if neighbor_id != null:
+			var neighbor_id: int = cell_to_id.get(cell_pos + dir, -1)
+			if neighbor_id != -1:
 				neighbors.append(neighbor_id)
 		molecule_state.neighbors = neighbors
 	return state
@@ -115,9 +129,11 @@ func _spawn_molecule(molecule_code: String, cell: Vector2i) -> void:
 	molecule_layer.add_child(instance)
 
 func _spawn_condition(condition_symbol: String, cell: Vector2i) -> void:
-	var instance: Node2D = ConditionScene.instantiate()
-	if instance.has_variable("condition_type"):
-		instance.condition_type = condition_symbol
+	var instance := ConditionScene.instantiate() as ChemistrisCondition
+	if instance == null:
+		push_error("Level: Condition scene is missing ChemistrisCondition script.")
+		return
+	instance.condition_type = condition_symbol
 	instance.position = GridHelper.cell_to_world(cell, true)
 	condition_layer.add_child(instance)
 
@@ -139,6 +155,9 @@ func _consume_condition(condition_symbol: String) -> void:
 	if condition_symbol == "":
 		return
 	for child in condition_layer.get_children():
-		if child.has_variable("condition_type") and child.condition_type == condition_symbol:
-			child.queue_free()
+		var condition := child as ChemistrisCondition
+		if condition == null:
+			continue
+		if condition.condition_type == condition_symbol:
+			condition.queue_free()
 			break
