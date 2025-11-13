@@ -20,6 +20,8 @@ const CONDITION_LABELS := {
 @onready var selected_details: RichTextLabel = %SelectedDetails
 @onready var status_label: Label = %StatusLabel
 @onready var start_button: Button = %StartButton
+@onready var scale_slider: HSlider = %ScaleSlider
+@onready var colorblind_toggle: CheckButton = %ColorblindToggle
 
 var _level_rows: Array[Dictionary] = []
 var _level_lookup: Dictionary = {}
@@ -27,6 +29,9 @@ var _level_buttons: Dictionary = {}
 var _selected_button: Button = null
 
 func _ready() -> void:
+	GameState.ui_scale_changed.connect(_on_ui_scale_changed)
+	GameState.colorblind_mode_changed.connect(_on_colorblind_mode_changed)
+	_on_ui_scale_changed(GameState.ui_scale)
 	_cache_level_rows()
 	if default_level_id.is_empty() and _level_rows.size() > 0:
 		default_level_id = str(_level_rows[0].get("L0_LEVEL", ""))
@@ -34,6 +39,10 @@ func _ready() -> void:
 	var initial_selection := GameState.selected_level_id if GameState.selected_level_id != "" else default_level_id
 	_select_level(initial_selection, false)
 	GameState.level_selected.connect(_on_game_state_selection)
+	scale_slider.value = GameState.ui_scale
+	scale_slider.value_changed.connect(_on_scale_slider_changed)
+	colorblind_toggle.button_pressed = GameState.colorblind_mode
+	colorblind_toggle.toggled.connect(_on_colorblind_toggled)
 
 func _cache_level_rows() -> void:
 	_level_rows = DataService.get_level_rows()
@@ -154,3 +163,18 @@ func _on_game_state_selection(level_id: String) -> void:
 	if not is_inside_tree():
 		return
 	_select_level(level_id, false)
+
+func _on_scale_slider_changed(value: float) -> void:
+	GameState.set_ui_scale(value)
+
+func _on_colorblind_toggled(pressed: bool) -> void:
+	GameState.set_colorblind_mode(pressed)
+
+func _on_ui_scale_changed(scale: float) -> void:
+	self.scale = Vector2.ONE * clampf(scale, 0.75, 1.5)
+	if not is_equal_approx(scale_slider.value, scale):
+		scale_slider.value = scale
+
+func _on_colorblind_mode_changed(enabled: bool) -> void:
+	if colorblind_toggle.button_pressed != enabled:
+		colorblind_toggle.button_pressed = enabled

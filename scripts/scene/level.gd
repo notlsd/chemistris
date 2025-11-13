@@ -7,15 +7,19 @@ const MoleculeScene := preload("res://scenes/Molecule.tscn")
 const ReactionDisplayScene := preload("res://scenes/ReactionDisplay.tscn")
 const ConditionScene := preload("res://scenes/Condition.tscn")
 const LevelHudScene := preload("res://ui/level_hud.tscn")
+const PauseOverlayScene := preload("res://ui/pause_overlay.tscn")
+const ResultOverlayScene := preload("res://ui/result_overlay.tscn")
+
+const MAIN_MENU_SCENE := "res://scenes/MainMenu.tscn"
 
 const CONDITION_ASSETS := {
-	"₳": {"name": "Heat / 加热", "icon": preload("res://assets/sprites/spr_heat/spr_heat_00.png")},
-	"₼": {"name": "Ignite / 点燃", "icon": preload("res://assets/sprites/spr_fire/spr_fire_00.png")},
-	"¤": {"name": "Light / 光照", "icon": preload("res://assets/sprites/spr_light/spr_light_00.png")},
-	"₪": {"name": "Electric / 放电", "icon": preload("res://assets/sprites/spr_elec/spr_elec_00.png")},
-	"¥": {"name": "High Temp / 高温", "icon": preload("res://assets/sprites/spr_HT/spr_HT_00.png")},
-	"₩": {"name": "High Temp+Pressure / 高温高压", "icon": preload("res://assets/sprites/spr_HTHP/spr_HTHP.png")},
-	"@": {"name": "Catalyst / 催化剂", "icon": null},
+	"₳": {"name": "Heat / 加热", "icon": preload("res://assets/sprites/spr_heat/spr_heat_00.png"), "color": "#FF8A00"},
+	"₼": {"name": "Ignite / 点燃", "icon": preload("res://assets/sprites/spr_fire/spr_fire_00.png"), "color": "#FF4F5E"},
+	"¤": {"name": "Light / 光照", "icon": preload("res://assets/sprites/spr_light/spr_light_00.png"), "color": "#FCCD4D"},
+	"₪": {"name": "Electric / 放电", "icon": preload("res://assets/sprites/spr_elec/spr_elec_00.png"), "color": "#4DD5FF"},
+	"¥": {"name": "High Temp / 高温", "icon": preload("res://assets/sprites/spr_HT/spr_HT_00.png"), "color": "#A855F7"},
+	"₩": {"name": "High Temp+Pressure / 高温高压", "icon": preload("res://assets/sprites/spr_HTHP/spr_HTHP.png"), "color": "#00B894"},
+	"@": {"name": "Catalyst / 催化剂", "icon": null, "color": "#94A3B8"},
 }
 
 @export var level_id := ""
@@ -26,12 +30,17 @@ const CONDITION_ASSETS := {
 @onready var condition_layer := $GridRoot/ConditionLayer
 @onready var reaction_layer := $ReactionLayer
 @onready var hud_canvas := $HudCanvas
+@onready var overlay_canvas := $OverlayCanvas
 
 var _controller := ReactionController.new()
 var _equation_codes: Array[String] = []
 var _level_row: Dictionary = {}
 var _hud: ChemistrisLevelHud = null
 var _successful_reactions := 0
+var _pause_overlay: ChemistrisPauseOverlay
+var _result_overlay: ChemistrisResultOverlay
+var _result_shown := false
+var _failure_shown := false
 
 func _ready() -> void:
 	if level_id.is_empty() and GameState.current_level_id != "":
@@ -147,10 +156,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			if _hud != null:
 				var summary := _format_product_counts(result.product_counts)
 				_hud.record_reaction(true, "Success -> %s" % summary)
+			if _successful_reactions == 1 and not _result_shown:
+				_show_result_overlay(true, "Reaction products match the CSV definition.")
 		else:
 			print("Reaction failed")
 			if _hud != null:
 				_hud.record_reaction(false, "Requirements not met for %s" % _equation_codes[0])
+		if not _failure_shown:
+			_failure_shown = true
+			_show_result_overlay(false, "Rebuild adjacency or ensure the correct condition token is on the board.")
+	if event.is_action_pressed("pause"):
+		_toggle_pause()
 
 func _show_reaction(result: Models.ReactionResult, equation_code: String) -> void:
 	var display: Control = ReactionDisplayScene.instantiate()
@@ -233,3 +249,60 @@ func _format_product_counts(counts: Dictionary) -> String:
 	for key in counts.keys():
 		parts.append("%s × %d" % [key, int(counts[key])])
 	return ", ".join(parts)
+
+func _toggle_pause() -> void:
+	if get_tree().paused:
+		_resume_from_pause()
+	else:
+		_show_pause_overlay()
+
+func _show_pause_overlay() -> void:
+	if _pause_overlay != null:
+		return
+	var overlay := PauseOverlayScene.instantiate() as ChemistrisPauseOverlay
+	if overlay == null:
+		return
+	overlay.resume_requested.connect(_resume_from_pause)
+	overlay.exit_to_menu_requested.connect(_return_to_menu)
+	overlay_canvas.add_child(overlay)
+	get_tree().paused = true
+	_pause_overlay = overlay
+
+func _resume_from_pause() -> void:
+	if _pause_overlay != null:
+		_pause_overlay.queue_free()
+		_pause_overlay = null
+	get_tree().paused = false
+
+func _show_result_overlay(success: bool, message: String) -> void:
+	if _result_overlay != null:
+		return
+	var overlay := ResultOverlayScene.instantiate() as ChemistrisResultOverlay
+	if overlay == null:
+		return
+	overlay.show_result(success, message)
+	overlay.replay_requested.connect(_restart_level)
+	overlay.exit_to_menu_requested.connect(_return_to_menu)
+	overlay_canvas.add_child(overlay)
+	get_tree().paused = true
+	_result_overlay = overlay
+	_result_shown = success or _result_shown
+
+func _restart_level() -> void:
+	get_tree().paused = false
+	if _result_overlay != null:
+		_result_overlay.queue_free()
+		_result_overlay = null
+	if level_id != "":
+		GameState.set_current_level(level_id)
+	get_tree().change_scene_to_file("res://scenes/Level.tscn")
+
+func _return_to_menu() -> void:
+	if _pause_overlay != null:
+		_pause_overlay.queue_free()
+		_pause_overlay = null
+	if _result_overlay != null:
+		_result_overlay.queue_free()
+		_result_overlay = null
+	get_tree().paused = false
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE)

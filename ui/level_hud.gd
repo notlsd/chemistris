@@ -14,6 +14,13 @@ const ConditionBadgeScene := preload("res://ui/condition_badge.tscn")
 @onready var condition_placeholder: Label = $Margin/VBox/ConditionPanel/ConditionVBox/ConditionPlaceholder
 
 var _reaction_attempts := 0
+var _colorblind_mode := false
+
+func _ready() -> void:
+	GameState.ui_scale_changed.connect(_on_ui_scale_changed)
+	GameState.colorblind_mode_changed.connect(_on_colorblind_mode_changed)
+	_on_ui_scale_changed(GameState.ui_scale)
+	_on_colorblind_mode_changed(GameState.colorblind_mode)
 
 func set_level_metadata(level_name: String, chapter: String, objective: String, banned: String) -> void:
 	level_title.text = level_name
@@ -42,7 +49,9 @@ func set_condition_symbols(symbols: Array[String], condition_data: Dictionary) -
 		var display_name: String = str(descriptor.get("name", "Unknown"))
 		var icon_value: Variant = descriptor.get("icon", null)
 		var icon: Texture2D = icon_value as Texture2D
-		badge.set_condition(symbol, display_name, icon)
+		var color_hex: String = str(descriptor.get("color", "#FFFFFF"))
+		var color := Color.from_string(color_hex, Color.WHITE)
+		badge.set_condition(symbol, display_name, icon, color, _colorblind_mode)
 		condition_container.add_child(badge)
 
 func record_reaction(success: bool, message: String) -> void:
@@ -56,3 +65,13 @@ func record_reaction(success: bool, message: String) -> void:
 
 func show_hint(text: String) -> void:
 	hint_label.text = text
+
+func _on_ui_scale_changed(scale: float) -> void:
+	scale = clampf(scale, 0.75, 1.5)
+	self.scale = Vector2.ONE * scale
+
+func _on_colorblind_mode_changed(enabled: bool) -> void:
+	_colorblind_mode = enabled
+	for badge in condition_container.get_children():
+		if badge is ChemistrisConditionBadge:
+			badge.apply_colorblind_mode(enabled)

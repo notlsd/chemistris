@@ -39,3 +39,5 @@ layout_mode = 0
 offset_left = 16.0
 offset_top = 48.0
 text = "Equation panel placeholder"
+
+[node name="OverlayCanvas" type="CanvasLayer" parent="."]
